@@ -13,6 +13,15 @@ class ANGTestGameMode : public AGameModeBase
 
 public:
 	ANGTestGameMode();
+
+private:
+
+	UPROPERTY(EditAnywhere)
+	TSubclassOf<class AShapeSpawner> SpawnerClass;
+
+protected:
+
+	virtual void BeginPlay() override;
 };
 
 

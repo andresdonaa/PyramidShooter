@@ -4,6 +4,7 @@
 #include "NGTestHUD.h"
 #include "NGTestCharacter.h"
 #include "UObject/ConstructorHelpers.h"
+#include "ShapeSpawner.h"
 
 ANGTestGameMode::ANGTestGameMode()
 	: Super()
@@ -14,4 +15,9 @@ ANGTestGameMode::ANGTestGameMode()
 
 	// use our custom HUD class
 	HUDClass = ANGTestHUD::StaticClass();
+}
+
+void ANGTestGameMode::BeginPlay()
+{
+	GetWorld()->SpawnActor<AShapeSpawner>(SpawnerClass, FVector(-500,0,200), FRotator::ZeroRotator);
 }
