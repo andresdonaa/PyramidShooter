@@ -50,6 +50,8 @@ void APyramidSpawner::Spawn()
 			}
 
 			LastSpawnPosition = SpawnedActor->GetActorLocation();
+
+			Cast<ASpawnObject>(SpawnedActor)->ApplyColor(FLinearColor(0, 1, 0));
 		}
 
 		LastSpawnPosition = InitialRowSpawnPosition + GetNewRowOffset(ActorWidth, ActorHeight);

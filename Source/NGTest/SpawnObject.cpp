@@ -1,9 +1,6 @@
-// Fill out your copyright notice in the Description page of Project Settings.
-
 
 #include "SpawnObject.h"
 
-// Sets default values
 ASpawnObject::ASpawnObject()
 {
 	PrimaryActorTick.bCanEverTick = true;
@@ -14,23 +11,30 @@ ASpawnObject::ASpawnObject()
 void ASpawnObject::BeginPlay()
 {
 	Super::BeginPlay();
-	
+
+	ApplyDefaultColor();
 }
 
-// Called every frame
 void ASpawnObject::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
-
 }
 
 void ASpawnObject::CreateComponents()
 {
 	ObjectToSpawn = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Actor"));
 	ObjectToSpawn->SetupAttachment(RootComponent);
-	
 }
 
-void ASpawnObject::ApplyColor()
+void ASpawnObject::ApplyDefaultColor()
 {
+	Material = UMaterialInstanceDynamic::Create(ObjectToSpawn->GetMaterial(0), NULL);
+	ObjectToSpawn->SetMaterial(0, Material);
+	Material->SetVectorParameterValue(FName(TEXT("BaseColor")), Color);
+}
+
+void ASpawnObject::ApplyColor(FLinearColor ColorToApply)
+{
+	Color = ColorToApply;
+	Material->SetVectorParameterValue(FName(TEXT("BaseColor")), ColorToApply);
 }

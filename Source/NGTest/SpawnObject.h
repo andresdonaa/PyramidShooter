@@ -13,10 +13,10 @@ class NGTEST_API ASpawnObject : public AActor
 public:	
 
 	ASpawnObject();
-	void ApplyColor();
+	void ApplyColor(FLinearColor ColorToApply);
 
 private:
-
+	
 	void CreateComponents();
 
 protected:
@@ -28,6 +28,12 @@ public:
 	UPROPERTY(VisibleAnywhere)
 	UStaticMeshComponent* ObjectToSpawn;
 
-	virtual void Tick(float DeltaTime) override;
+	UPROPERTY(EditAnywhere)
+	FLinearColor Color;
 
+	UPROPERTY()
+	class UMaterialInstanceDynamic* Material;
+
+	virtual void Tick(float DeltaTime) override;
+	void ApplyDefaultColor();
 };
