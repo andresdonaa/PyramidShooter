@@ -10,6 +10,21 @@ class NGTEST_API ASpawnObject : public AActor
 {
 	GENERATED_BODY()
 	
+public:
+
+	UPROPERTY(VisibleAnywhere)
+	UStaticMeshComponent* ObjectToSpawn;
+
+	virtual void Tick(float DeltaTime) override;
+
+private:
+
+	UPROPERTY(EditAnywhere)
+	FLinearColor Color;
+
+	UPROPERTY()
+	class UMaterialInstanceDynamic* Material;
+
 public:	
 
 	ASpawnObject();
@@ -18,22 +33,9 @@ public:
 private:
 	
 	void CreateComponents();
+	void ApplyDefaultColor();
 
 protected:
 	
 	virtual void BeginPlay() override;
-
-public:	
-
-	UPROPERTY(VisibleAnywhere)
-	UStaticMeshComponent* ObjectToSpawn;
-
-	UPROPERTY(EditAnywhere)
-	FLinearColor Color;
-
-	UPROPERTY()
-	class UMaterialInstanceDynamic* Material;
-
-	virtual void Tick(float DeltaTime) override;
-	void ApplyDefaultColor();
 };

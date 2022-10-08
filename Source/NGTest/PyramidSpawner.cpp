@@ -37,7 +37,7 @@ void APyramidSpawner::Spawn()
 
 		for (int col = 0; col < PyramidBaseColumns - row; col++)
 		{
-			AActor* SpawnedActor = nullptr;
+			ASpawnObject* SpawnedActor = nullptr;
 
 			if (!isFirstColumnInRow)
 			{
@@ -51,7 +51,7 @@ void APyramidSpawner::Spawn()
 
 			LastSpawnPosition = SpawnedActor->GetActorLocation();
 
-			Cast<ASpawnObject>(SpawnedActor)->ApplyColor(FLinearColor(0, 1, 0));
+			SetSpawnedActorColor(SpawnedActor);
 		}
 
 		LastSpawnPosition = InitialRowSpawnPosition + GetNewRowOffset(ActorWidth, ActorHeight);
@@ -64,3 +64,15 @@ FVector APyramidSpawner::GetNewRowOffset(float ActorWidth, float ActorHeight)
 	return FVector((ActorWidth / 2) + (ColumnSpawnOffset / 2), 0, ActorHeight + 10);
 }
 
+void APyramidSpawner::SetSpawnedActorColor(ASpawnObject* SpawnedActor)
+{
+	FLinearColor RandomColor = GetRandomColor();
+	SpawnedActor->ApplyColor(RandomColor);
+}
+
+FLinearColor APyramidSpawner::GetRandomColor()
+{
+	int ColorsLength = SpawnColors.Num();
+	int RandomIndex = FMath::RandRange(0, ColorsLength - 1);
+	return SpawnColors[RandomIndex];
+}

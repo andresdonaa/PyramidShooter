@@ -15,11 +15,15 @@ private:
 
 	UPROPERTY()
 	int ColumnSpawnOffset;
-		
-	FVector GetNewRowOffset(float ActorWidth, float ActorHeight);
-
+	
 protected:
 	
 	virtual void BeginPlay() override;
 	void Spawn();
+
+private:
+
+	FVector GetNewRowOffset(float ActorWidth, float ActorHeight);
+	void SetSpawnedActorColor(ASpawnObject* SpawnedActor);
+	FLinearColor GetRandomColor();
 };

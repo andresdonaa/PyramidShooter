@@ -18,6 +18,9 @@ protected:
 	UPROPERTY(EditDefaultsOnly)
 	TSubclassOf<class ASpawnObject> SpawnObjectClass;
 
+	UPROPERTY(EditAnywhere)
+	TArray<FLinearColor> SpawnColors;
+
 	virtual void BeginPlay() override;
 
 	void Spawn();
