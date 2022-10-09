@@ -19,11 +19,17 @@ private:
 protected:
 	
 	virtual void BeginPlay() override;
-	void Spawn();
-
+	virtual void Spawn() override;
+	
 private:
 
 	FVector GetNewRowOffset(float ActorWidth, float ActorHeight);
 	void SetSpawnedActorColor(ASpawnObject* SpawnedActor);
 	FLinearColor GetRandomColor();
+
+public:
+
+	void PrintOvelappingActorsName(ASpawnObject* OfActor);
+	virtual void OnSpawnedObjectHitted(ASpawnObject* HittedObject) override;
+
 };

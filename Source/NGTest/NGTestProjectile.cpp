@@ -3,6 +3,7 @@
 #include "NGTestProjectile.h"
 #include "GameFramework/ProjectileMovementComponent.h"
 #include "Components/SphereComponent.h"
+#include "SpawnObject.h"
 
 ANGTestProjectile::ANGTestProjectile() 
 {

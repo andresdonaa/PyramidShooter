@@ -13,6 +13,9 @@ class NGTEST_API ASpawnObject : public AActor
 public:
 
 	UPROPERTY(VisibleAnywhere)
+	class UBoxComponent* CollisionComp;
+
+	UPROPERTY(VisibleAnywhere)
 	UStaticMeshComponent* ObjectToSpawn;
 
 	virtual void Tick(float DeltaTime) override;
@@ -23,12 +26,19 @@ private:
 	FLinearColor Color;
 
 	UPROPERTY()
+	bool bShouldDestroy = false;
+
+	UPROPERTY()
 	class UMaterialInstanceDynamic* Material;
 
 public:	
 
 	ASpawnObject();
 	void ApplyColor(FLinearColor ColorToApply);
+
+	UFUNCTION()
+	void OnHitted(UPrimitiveComponent* HitComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, FVector NormalImpulse, const FHitResult& Hit);
+
 
 private:
 	

@@ -1,5 +1,9 @@
 
 #include "SpawnObject.h"
+#include "Components/BoxComponent.h"
+#include "NGTestProjectile.h"
+#include "ShapeSpawner.h"
+
 
 ASpawnObject::ASpawnObject()
 {
@@ -11,6 +15,8 @@ ASpawnObject::ASpawnObject()
 void ASpawnObject::BeginPlay()
 {
 	Super::BeginPlay();
+	
+	ObjectToSpawn->OnComponentHit.AddDynamic(this, &ASpawnObject::OnHitted);
 
 	ApplyDefaultColor();
 }
@@ -21,9 +27,13 @@ void ASpawnObject::Tick(float DeltaTime)
 }
 
 void ASpawnObject::CreateComponents()
-{
+{	
 	ObjectToSpawn = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Actor"));
-	ObjectToSpawn->SetupAttachment(RootComponent);
+	
+	RootComponent = ObjectToSpawn;
+
+	CollisionComp = CreateDefaultSubobject<UBoxComponent>(TEXT("BoxComp"));
+	CollisionComp->SetupAttachment(ObjectToSpawn);
 }
 
 void ASpawnObject::ApplyDefaultColor()
@@ -37,4 +47,17 @@ void ASpawnObject::ApplyColor(FLinearColor ColorToApply)
 {
 	Color = ColorToApply;
 	Material->SetVectorParameterValue(FName(TEXT("BaseColor")), ColorToApply);
+}
+
+void ASpawnObject::OnHitted(UPrimitiveComponent* HitComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, FVector NormalImpulse, const FHitResult& Hit)
+{
+	if ((OtherActor != nullptr) && (OtherActor != this) && (OtherComp != nullptr))
+	{
+		if (Cast<ANGTestProjectile>(OtherActor))
+		{
+			AShapeSpawner* ShapeSpawner = Cast<AShapeSpawner>(GetOwner());
+
+			ShapeSpawner->OnSpawnedObjectHitted(this);
+		}
+	}
 }

@@ -23,10 +23,11 @@ protected:
 
 	virtual void BeginPlay() override;
 
-	void Spawn();
+	virtual void Spawn();
 
 public:	
 
 	virtual void Tick(float DeltaTime) override;
+	virtual void OnSpawnedObjectHitted(ASpawnObject* HittedObject);
 
 };

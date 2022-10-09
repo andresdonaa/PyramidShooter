@@ -11,6 +11,7 @@
 #include "Kismet/GameplayStatics.h"
 #include "MotionControllerComponent.h"
 #include "XRMotionControllerBase.h" // for FXRMotionControllerBase::RightHandSourceId
+#include "GameFramework/PlayerState.h"
 
 DEFINE_LOG_CATEGORY_STATIC(LogFPChar, Warning, All);
 
@@ -105,6 +106,8 @@ void ANGTestCharacter::BeginPlay()
 	}
 }
 
+
+
 //////////////////////////////////////////////////////////////////////////
 // Input
 
@@ -140,6 +143,11 @@ void ANGTestCharacter::SetupPlayerInputComponent(class UInputComponent* PlayerIn
 
 void ANGTestCharacter::OnFire()
 {
+	/*if (GetLocalRole() < ROLE_Authority)
+	{
+		ServerOnFire();
+	}*/
+
 	// try and fire a projectile
 	if (ProjectileClass != nullptr)
 	{
@@ -185,6 +193,16 @@ void ANGTestCharacter::OnFire()
 		}
 	}
 }
+
+//bool ANGTestCharacter::ServerOnFire_Validate()
+//{
+//	return true;
+//}
+//
+//void ANGTestCharacter::ServerOnFire_Implementation()
+//{
+//	OnFire();
+//}
 
 void ANGTestCharacter::OnResetVR()
 {

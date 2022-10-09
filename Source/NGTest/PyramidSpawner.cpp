@@ -2,6 +2,8 @@
 #include "PyramidSpawner.h"
 #include "ShapeSpawner.h"
 #include "SpawnObject.h"
+#include "Kismet/GameplayStatics.h"
+#include "GameFramework/PlayerState.h"
 
 
 void APyramidSpawner::BeginPlay()
@@ -11,9 +13,10 @@ void APyramidSpawner::BeginPlay()
 	Spawn();
 }
 
-
 void APyramidSpawner::Spawn()
 {
+	Super::Spawn();
+
 	UWorld* World = GetWorld();
 
 	ASpawnObject* ReferenceActor = World->SpawnActor<ASpawnObject>(SpawnObjectClass, GetActorLocation() + 1000, GetActorRotation());
@@ -52,6 +55,7 @@ void APyramidSpawner::Spawn()
 			LastSpawnPosition = SpawnedActor->GetActorLocation();
 
 			SetSpawnedActorColor(SpawnedActor);
+			SpawnedActor->SetOwner(this);
 		}
 
 		LastSpawnPosition = InitialRowSpawnPosition + GetNewRowOffset(ActorWidth, ActorHeight);
@@ -75,4 +79,26 @@ FLinearColor APyramidSpawner::GetRandomColor()
 	int ColorsLength = SpawnColors.Num();
 	int RandomIndex = FMath::RandRange(0, ColorsLength - 1);
 	return SpawnColors[RandomIndex];
+}
+
+void APyramidSpawner::OnSpawnedObjectHitted(ASpawnObject* HittedObject)
+{
+	Super::OnSpawnedObjectHitted(HittedObject);
+
+	UGameplayStatics::GetPlayerPawn(this, 0)->GetController()->GetPlayerState<APlayerState>()->Score++;
+
+	PrintOvelappingActorsName(HittedObject);
+}
+
+void APyramidSpawner::PrintOvelappingActorsName(ASpawnObject* OfActor)
+{
+	TArray<AActor*> OverlappingActors;
+	OfActor->GetOverlappingActors(OverlappingActors, OfActor->StaticClass());
+
+	UE_LOG(LogTemp, Warning, TEXT("Ovelapping Actors COUNT: %d"), OverlappingActors.Num());
+
+	for (AActor* actor : OverlappingActors)
+	{
+		UE_LOG(LogTemp, Warning, TEXT("Ovelapping Actors: %s"), *actor->GetFName().ToString());
+	}
 }

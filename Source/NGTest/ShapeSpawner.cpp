@@ -18,6 +18,12 @@ void AShapeSpawner::Tick(float DeltaTime)
 
 void AShapeSpawner::Spawn()
 {
+	UE_LOG(LogTemp, Warning, TEXT("Spawned"));
+}
+
+void AShapeSpawner::OnSpawnedObjectHitted(ASpawnObject* HittedObject)
+{
+	UE_LOG(LogTemp, Warning, TEXT("OnSpawnedObjectHitted"));
 }
 
 
