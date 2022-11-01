@@ -85,20 +85,53 @@ void APyramidSpawner::OnSpawnedObjectHitted(ASpawnObject* HittedObject)
 {
 	Super::OnSpawnedObjectHitted(HittedObject);
 
-	UGameplayStatics::GetPlayerPawn(this, 0)->GetController()->GetPlayerState<APlayerState>()->Score++;
+	MarkActorForDestroy(HittedObject);
 
-	PrintOvelappingActorsName(HittedObject);
+	CheckAdyacentsForDestroy(HittedObject);
+
+	DestroyAllMarkedActors();
 }
 
-void APyramidSpawner::PrintOvelappingActorsName(ASpawnObject* OfActor)
+void APyramidSpawner::CheckAdyacentsForDestroy(ASpawnObject* FromActor)
 {
 	TArray<AActor*> OverlappingActors;
-	OfActor->GetOverlappingActors(OverlappingActors, OfActor->StaticClass());
+	FromActor->GetOverlappingActors(OverlappingActors, FromActor->StaticClass());
 
-	UE_LOG(LogTemp, Warning, TEXT("Ovelapping Actors COUNT: %d"), OverlappingActors.Num());
-
+	FLinearColor ColorToCompare = FromActor->Color;
 	for (AActor* actor : OverlappingActors)
 	{
-		UE_LOG(LogTemp, Warning, TEXT("Ovelapping Actors: %s"), *actor->GetFName().ToString());
+		ASpawnObject* AdyacentActor = Cast<ASpawnObject>(actor);
+		if (AdyacentActor)
+		{
+			if (AdyacentActor->Color == ColorToCompare && !AdyacentActor->bShouldDestroy)
+			{
+				MarkActorForDestroy(AdyacentActor);
+				CheckAdyacentsForDestroy(AdyacentActor);
+			}
+		}
 	}
+}
+
+void APyramidSpawner::MarkActorForDestroy(ASpawnObject* Actor)
+{
+	Actor->bShouldDestroy = true;
+
+	ActorsMarkedForDestroy.Add(Actor);
+}
+
+void APyramidSpawner::DestroyAllMarkedActors()
+{
+	for (AActor* actor : ActorsMarkedForDestroy)
+	{
+		AddScore();
+		actor->Destroy();
+	}
+
+	ActorsMarkedForDestroy.Empty();
+}
+
+void APyramidSpawner::AddScore()
+{
+	APlayerState* PlayerState = UGameplayStatics::GetPlayerPawn(this, 0)->GetController()->GetPlayerState<APlayerState>();
+	PlayerState->Score++;
 }

@@ -22,16 +22,16 @@ public:
 
 private:
 
+	UPROPERTY()
+	class UMaterialInstanceDynamic* Material;
+
+public:	
+
 	UPROPERTY(EditAnywhere)
 	FLinearColor Color;
 
 	UPROPERTY()
 	bool bShouldDestroy = false;
-
-	UPROPERTY()
-	class UMaterialInstanceDynamic* Material;
-
-public:	
 
 	ASpawnObject();
 	void ApplyColor(FLinearColor ColorToApply);

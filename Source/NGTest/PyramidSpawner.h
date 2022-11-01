@@ -15,6 +15,9 @@ private:
 
 	UPROPERTY()
 	int ColumnSpawnOffset;
+
+	UPROPERTY()
+	TArray<AActor*> ActorsMarkedForDestroy;
 	
 protected:
 	
@@ -26,10 +29,12 @@ private:
 	FVector GetNewRowOffset(float ActorWidth, float ActorHeight);
 	void SetSpawnedActorColor(ASpawnObject* SpawnedActor);
 	FLinearColor GetRandomColor();
+	void MarkActorForDestroy(ASpawnObject* Actor);
+	void CheckAdyacentsForDestroy(ASpawnObject* HittedObject);
+	void DestroyAllMarkedActors();
+	void AddScore();
 
 public:
-
-	void PrintOvelappingActorsName(ASpawnObject* OfActor);
 	virtual void OnSpawnedObjectHitted(ASpawnObject* HittedObject) override;
 
 };
