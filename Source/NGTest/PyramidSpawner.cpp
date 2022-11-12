@@ -4,7 +4,7 @@
 #include "SpawnObject.h"
 #include "Kismet/GameplayStatics.h"
 #include "GameFramework/PlayerState.h"
-
+#include "GameFramework/Character.h"
 
 void APyramidSpawner::BeginPlay()
 {
@@ -81,15 +81,15 @@ FLinearColor APyramidSpawner::GetRandomColor()
 	return SpawnColors[RandomIndex];
 }
 
-void APyramidSpawner::OnSpawnedObjectHitted(ASpawnObject* HittedObject)
+void APyramidSpawner::OnSpawnedObjectHitted(ASpawnObject* HittedObject, AController* HitterOwner)
 {
-	Super::OnSpawnedObjectHitted(HittedObject);
+	Super::OnSpawnedObjectHitted(HittedObject, HitterOwner);
 
 	MarkActorForDestroy(HittedObject);
 
 	CheckAdyacentsForDestroy(HittedObject);
 
-	DestroyAllMarkedActors();
+	DestroyAllMarkedActors(HitterOwner);
 }
 
 void APyramidSpawner::CheckAdyacentsForDestroy(ASpawnObject* FromActor)
@@ -119,19 +119,23 @@ void APyramidSpawner::MarkActorForDestroy(ASpawnObject* Actor)
 	ActorsMarkedForDestroy.Add(Actor);
 }
 
-void APyramidSpawner::DestroyAllMarkedActors()
+void APyramidSpawner::DestroyAllMarkedActors(AController* HitterOwner)
 {
 	for (AActor* actor : ActorsMarkedForDestroy)
 	{
-		AddScore();
+		AddScore(HitterOwner);
 		actor->Destroy();
 	}
 
 	ActorsMarkedForDestroy.Empty();
 }
 
-void APyramidSpawner::AddScore()
-{
-	APlayerState* PlayerState = UGameplayStatics::GetPlayerPawn(this, 0)->GetController()->GetPlayerState<APlayerState>();
-	PlayerState->Score++;
+void APyramidSpawner::AddScore(AController* HitterOwner)
+{	
+	if (HitterOwner)
+	{
+		APlayerState* PlayerState = HitterOwner->GetPlayerState<APlayerState>();
+		PlayerState->Score++;
+	}
 }
+

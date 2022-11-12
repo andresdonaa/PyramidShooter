@@ -21,9 +21,8 @@ void AShapeSpawner::Spawn()
 	UE_LOG(LogTemp, Warning, TEXT("Spawned"));
 }
 
-void AShapeSpawner::OnSpawnedObjectHitted(ASpawnObject* HittedObject)
+void AShapeSpawner::OnSpawnedObjectHitted(ASpawnObject* HittedObject, AController* HitterOwner)
 {
 	UE_LOG(LogTemp, Warning, TEXT("OnSpawnedObjectHitted"));
 }
-
 

@@ -8,6 +8,7 @@
 
 class USphereComponent;
 class UProjectileMovementComponent;
+class AController;
 
 UCLASS(config=Game)
 class ANGTestProjectile : public AActor
@@ -25,6 +26,9 @@ class ANGTestProjectile : public AActor
 public:
 	ANGTestProjectile();
 
+	UPROPERTY()
+	AController* ControllerInstigator;
+		
 	/** called when projectile hits something */
 	UFUNCTION()
 	void OnHit(UPrimitiveComponent* HitComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, FVector NormalImpulse, const FHitResult& Hit);

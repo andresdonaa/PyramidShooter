@@ -3,7 +3,13 @@
 #include "Components/BoxComponent.h"
 #include "NGTestProjectile.h"
 #include "ShapeSpawner.h"
+#include "Net/UnrealNetwork.h"
 
+void ASpawnObject::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
+{
+	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
+	DOREPLIFETIME(ASpawnObject, Color);
+}
 
 ASpawnObject::ASpawnObject()
 {
@@ -16,7 +22,10 @@ void ASpawnObject::BeginPlay()
 {
 	Super::BeginPlay();
 	
-	ObjectToSpawn->OnComponentHit.AddDynamic(this, &ASpawnObject::OnHitted);
+	if (HasAuthority())
+	{
+		ObjectToSpawn->OnComponentHit.AddDynamic(this, &ASpawnObject::OnHitted);
+	}
 
 	ApplyDefaultColor();
 }
@@ -46,18 +55,22 @@ void ASpawnObject::ApplyDefaultColor()
 void ASpawnObject::ApplyColor(FLinearColor ColorToApply)
 {
 	Color = ColorToApply;
-	Material->SetVectorParameterValue(FName(TEXT("BaseColor")), ColorToApply);
+	Material->SetVectorParameterValue(FName(TEXT("BaseColor")), Color);
 }
 
 void ASpawnObject::OnHitted(UPrimitiveComponent* HitComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, FVector NormalImpulse, const FHitResult& Hit)
 {
 	if ((OtherActor != nullptr) && (OtherActor != this) && (OtherComp != nullptr))
 	{
-		if (Cast<ANGTestProjectile>(OtherActor))
-		{
+		ANGTestProjectile* Projectile = Cast<ANGTestProjectile>(OtherActor);
+		if (Projectile)
+		{	
 			AShapeSpawner* ShapeSpawner = Cast<AShapeSpawner>(GetOwner());
-
-			ShapeSpawner->OnSpawnedObjectHitted(this);
+			
+			if (Projectile->ControllerInstigator)
+			{
+				ShapeSpawner->OnSpawnedObjectHitted(this, Projectile->ControllerInstigator);
+			}
 		}
 	}
 }

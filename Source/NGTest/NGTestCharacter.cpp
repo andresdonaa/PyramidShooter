@@ -12,6 +12,7 @@
 #include "MotionControllerComponent.h"
 #include "XRMotionControllerBase.h" // for FXRMotionControllerBase::RightHandSourceId
 #include "GameFramework/PlayerState.h"
+#include "Net/UnrealNetwork.h"
 
 DEFINE_LOG_CATEGORY_STATIC(LogFPChar, Warning, All);
 
@@ -143,11 +144,16 @@ void ANGTestCharacter::SetupPlayerInputComponent(class UInputComponent* PlayerIn
 
 void ANGTestCharacter::OnFire()
 {
-	/*if (GetLocalRole() < ROLE_Authority)
-	{
-		ServerOnFire();
-	}*/
+	ServerOnFire();
+}
 
+bool ANGTestCharacter::ServerOnFire_Validate()
+{
+	return true;
+}
+
+void ANGTestCharacter::ServerOnFire_Implementation()
+{
 	// try and fire a projectile
 	if (ProjectileClass != nullptr)
 	{
@@ -171,17 +177,50 @@ void ANGTestCharacter::OnFire()
 				ActorSpawnParams.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AdjustIfPossibleButDontSpawnIfColliding;
 
 				// spawn the projectile at the muzzle
-				World->SpawnActor<ANGTestProjectile>(ProjectileClass, SpawnLocation, SpawnRotation, ActorSpawnParams);
+				ANGTestProjectile* Projectile = World->SpawnActor<ANGTestProjectile>(ProjectileClass, SpawnLocation, SpawnRotation, ActorSpawnParams);
+				Projectile->ControllerInstigator = GetController();
+
+				//Projectile->SetOwner(this);
 			}
 		}
 	}
 
+	PlayFireSound();
+
+	PlayFireAnimation();
+}
+
+void ANGTestCharacter::PlayFireSound()
+{
+	ServerPlayFireSound();
+}
+
+bool ANGTestCharacter::ServerPlayFireSound_Validate()
+{
+	return true;
+}
+
+void ANGTestCharacter::ServerPlayFireSound_Implementation()
+{
 	// try and play the sound if specified
 	if (FireSound != nullptr)
 	{
 		UGameplayStatics::PlaySoundAtLocation(this, FireSound, GetActorLocation());
 	}
+}
 
+void ANGTestCharacter::PlayFireAnimation()
+{
+	ServerPlayFireAnimation();
+}
+
+bool ANGTestCharacter::ServerPlayFireAnimation_Validate()
+{
+	return true;
+}
+
+void ANGTestCharacter::ServerPlayFireAnimation_Implementation()
+{
 	// try and play a firing animation if specified
 	if (FireAnimation != nullptr)
 	{
@@ -193,16 +232,6 @@ void ANGTestCharacter::OnFire()
 		}
 	}
 }
-
-//bool ANGTestCharacter::ServerOnFire_Validate()
-//{
-//	return true;
-//}
-//
-//void ANGTestCharacter::ServerOnFire_Implementation()
-//{
-//	OnFire();
-//}
 
 void ANGTestCharacter::OnResetVR()
 {

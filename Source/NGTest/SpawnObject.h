@@ -27,7 +27,7 @@ private:
 
 public:	
 
-	UPROPERTY(EditAnywhere)
+	UPROPERTY(Replicated, EditAnywhere)
 	FLinearColor Color;
 
 	UPROPERTY()
@@ -39,13 +39,15 @@ public:
 	UFUNCTION()
 	void OnHitted(UPrimitiveComponent* HitComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, FVector NormalImpulse, const FHitResult& Hit);
 
+	virtual void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
 
 private:
 	
 	void CreateComponents();
 	void ApplyDefaultColor();
-
+	
 protected:
 	
 	virtual void BeginPlay() override;
+
 };

@@ -28,6 +28,5 @@ protected:
 public:	
 
 	virtual void Tick(float DeltaTime) override;
-	virtual void OnSpawnedObjectHitted(ASpawnObject* HittedObject);
-
+	virtual void OnSpawnedObjectHitted(ASpawnObject* HittedObject, AController* HitterOwner);
 };

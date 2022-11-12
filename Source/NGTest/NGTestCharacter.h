@@ -90,9 +90,17 @@ protected:
 	
 	/** Fires a projectile. */
 	void OnFire();
+	void PlayFireSound();
+	void PlayFireAnimation();
 
-	/*UFUNCTION(reliable, server, WithValidation)
-	void ServerOnFire();*/
+	UFUNCTION(Reliable, Server, WithValidation)
+	void ServerOnFire();
+	
+	UFUNCTION(Reliable, NetMulticast, WithValidation)
+	void ServerPlayFireSound();
+
+	UFUNCTION(Reliable, NetMulticast, WithValidation)
+	void ServerPlayFireAnimation();
 
 	/** Resets HMD orientation and position in VR. */
 	void OnResetVR();
@@ -146,6 +154,5 @@ public:
 	USkeletalMeshComponent* GetMesh1P() const { return Mesh1P; }
 	/** Returns FirstPersonCameraComponent subobject **/
 	UCameraComponent* GetFirstPersonCameraComponent() const { return FirstPersonCameraComponent; }
-
 };
 

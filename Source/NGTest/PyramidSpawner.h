@@ -31,10 +31,9 @@ private:
 	FLinearColor GetRandomColor();
 	void MarkActorForDestroy(ASpawnObject* Actor);
 	void CheckAdyacentsForDestroy(ASpawnObject* HittedObject);
-	void DestroyAllMarkedActors();
-	void AddScore();
+	void DestroyAllMarkedActors(AController* HitterOwner);
+	void AddScore(AController* HitterOwner);
 
 public:
-	virtual void OnSpawnedObjectHitted(ASpawnObject* HittedObject) override;
-
+	virtual void OnSpawnedObjectHitted(ASpawnObject* HittedObject, AController* HitterOwner) override;
 };

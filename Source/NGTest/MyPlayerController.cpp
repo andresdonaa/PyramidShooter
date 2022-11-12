@@ -6,10 +6,10 @@ void AMyPlayerController::BeginPlay()
 {
     Super::BeginPlay();
     
-    if (IsLocalPlayerController())
+   /* if (IsLocalPlayerController())
     {
         CreateHUD();
-    }
+    }*/
 }
 
 void AMyPlayerController::CreateHUD()
