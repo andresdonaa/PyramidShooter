@@ -178,9 +178,8 @@ void ANGTestCharacter::ServerOnFire_Implementation()
 
 				// spawn the projectile at the muzzle
 				ANGTestProjectile* Projectile = World->SpawnActor<ANGTestProjectile>(ProjectileClass, SpawnLocation, SpawnRotation, ActorSpawnParams);
-				Projectile->ControllerInstigator = GetController();
 
-				//Projectile->SetOwner(this);
+				Projectile->SetOwner(this);
 			}
 		}
 	}

@@ -65,12 +65,16 @@ void ASpawnObject::OnHitted(UPrimitiveComponent* HitComp, AActor* OtherActor, UP
 		ANGTestProjectile* Projectile = Cast<ANGTestProjectile>(OtherActor);
 		if (Projectile)
 		{	
-			AShapeSpawner* ShapeSpawner = Cast<AShapeSpawner>(GetOwner());
+			AShapeSpawner* ShapeSpawner = Cast<AShapeSpawner>(GetOwner());			
+			AActor* ProjectileOwner = Projectile->GetOwner();
 			
-			if (Projectile->ControllerInstigator)
+			if (ProjectileOwner)
 			{
-				ShapeSpawner->OnSpawnedObjectHitted(this, Projectile->ControllerInstigator);
+				AController* OwnerController = ProjectileOwner->GetInstigatorController();
+				ShapeSpawner->OnSpawnedObjectHitted(this, OwnerController);
 			}
+
+			Projectile->Destroy();
 		}
 	}
 }
