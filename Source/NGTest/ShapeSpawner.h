@@ -21,8 +21,10 @@ protected:
 	UPROPERTY(EditAnywhere)
 	TArray<FLinearColor> SpawnColors;
 
-	virtual void BeginPlay() override;
+	UPROPERTY()
+	int SpawnedObjectCounter = 0;
 
+	virtual void BeginPlay() override;
 	virtual void Spawn();
 
 public:	

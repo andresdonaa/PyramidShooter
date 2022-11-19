@@ -33,6 +33,9 @@ private:
 	void CheckAdyacentsForDestroy(ASpawnObject* HittedObject);
 	void DestroyAllMarkedActors(AController* HitterOwner);
 	void AddScore(AController* HitterOwner);
+	void SpawnActors(UWorld* World, FVector& LastSpawnPosition, FVector& SpawnOffset, FVector& InitialRowSpawnPosition, float ActorWidth, float ActorHeight);
+	void CheckForGameOver();
+	void EndGame();
 
 public:
 	virtual void OnSpawnedObjectHitted(ASpawnObject* HittedObject, AController* HitterOwner) override;

@@ -22,13 +22,4 @@ void ANGTestGameMode::BeginPlay()
 	GetWorld()->SpawnActor<AShapeSpawner>(SpawnerClass, FVector(-500,0,200), FRotator::ZeroRotator);
 }
 
-
-//if (HasAuthority())
-//{
-// GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, FString::Printf(TEXT("%s = StringVariable / %f = FloatVariable"), MyString, MyFloat));
-//	GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Red, TEXT("Has Authority"));
-//}
-//else
-//{
 //	GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Green, TEXT("Remote"));
-//}

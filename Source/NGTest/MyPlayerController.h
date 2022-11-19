@@ -17,8 +17,20 @@ private:
 
 	UPROPERTY(EditAnywhere)
 	TSubclassOf<class UUserWidget> HUDClass;
+	
+	void CreateHUD();
 
+	UFUNCTION(Reliable, Client)
+	void ClientShowLeaderboard();
+
+public:
+
+	virtual void GameHasEnded(class AActor* EndGameFocus = NULL, bool bIsWinner = false) override;
+
+	UFUNCTION(BlueprintImplementableEvent)
+	void ShowLeaderboard();
+
+	UPROPERTY(BlueprintReadOnly)
 	UUserWidget* HUD;
 
-	void CreateHUD();
 };

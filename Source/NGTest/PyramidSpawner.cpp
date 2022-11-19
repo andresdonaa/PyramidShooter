@@ -34,6 +34,11 @@ void APyramidSpawner::Spawn()
 
 	ReferenceActor->Destroy();
 
+	SpawnActors(World, LastSpawnPosition, SpawnOffset, InitialRowSpawnPosition, ActorWidth, ActorHeight);
+}
+
+void APyramidSpawner::SpawnActors(UWorld* World, FVector& LastSpawnPosition, FVector& SpawnOffset, FVector& InitialRowSpawnPosition, float ActorWidth, float ActorHeight)
+{
 	for (int row = 0; row < PyramidBaseColumns; row++)
 	{
 		bool isFirstColumnInRow = true;
@@ -51,6 +56,8 @@ void APyramidSpawner::Spawn()
 				SpawnedActor = World->SpawnActor<ASpawnObject>(SpawnObjectClass, LastSpawnPosition, GetActorRotation());
 				isFirstColumnInRow = false;
 			}
+
+			SpawnedObjectCounter++;
 
 			LastSpawnPosition = SpawnedActor->GetActorLocation();
 
@@ -90,6 +97,8 @@ void APyramidSpawner::OnSpawnedObjectHitted(ASpawnObject* HittedObject, AControl
 	CheckAdyacentsForDestroy(HittedObject);
 
 	DestroyAllMarkedActors(HitterOwner);
+
+	CheckForGameOver();	
 }
 
 void APyramidSpawner::CheckAdyacentsForDestroy(ASpawnObject* FromActor)
@@ -125,9 +134,26 @@ void APyramidSpawner::DestroyAllMarkedActors(AController* HitterOwner)
 	{
 		AddScore(HitterOwner);
 		actor->Destroy();
+		SpawnedObjectCounter--;
 	}
 
 	ActorsMarkedForDestroy.Empty();
+}
+
+void APyramidSpawner::CheckForGameOver()
+{
+	if (SpawnedObjectCounter <= 0)
+	{
+		EndGame();
+	}
+}
+
+void APyramidSpawner::EndGame()
+{
+	for (FConstControllerIterator ControllerIterator = GetWorld()->GetControllerIterator(); ControllerIterator; ++ControllerIterator)
+	{
+		(*ControllerIterator)->GameHasEnded(NULL, false);
+	}
 }
 
 void APyramidSpawner::AddScore(AController* HitterOwner)
