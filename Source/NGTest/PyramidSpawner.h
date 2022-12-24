@@ -18,6 +18,12 @@ private:
 
 	UPROPERTY()
 	TArray<AActor*> ActorsMarkedForDestroy;
+
+	UPROPERTY()
+	TArray<int> MatchingOverlappingCollection;
+
+	//TODO: Move to specific responsible class
+	const TArray<int> FibonacciSeries = { 0,1,1,2,3,5,8,13,21,34,55,89,144,233,377,610,987,1597,2584,4181 };
 	
 protected:
 	
@@ -36,6 +42,7 @@ private:
 	void SpawnActors(UWorld* World, FVector& LastSpawnPosition, FVector& SpawnOffset, FVector& InitialRowSpawnPosition, float ActorWidth, float ActorHeight);
 	void CheckForGameOver();
 	void EndGame();
+	void FillMatchingOverlappingCollection(TArray<AActor*> OverlappingActors, FLinearColor ColorToCompare);
 
 public:
 	virtual void OnSpawnedObjectHitted(ASpawnObject* HittedObject, AController* HitterOwner) override;

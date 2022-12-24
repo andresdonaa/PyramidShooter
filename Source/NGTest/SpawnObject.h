@@ -33,6 +33,9 @@ public:
 	UPROPERTY()
 	bool bShouldDestroy = false;
 
+	UPROPERTY()
+	bool bAlreadyMatchCounted = false;
+
 	ASpawnObject();
 	void ApplyColor(FLinearColor ColorToApply);
 

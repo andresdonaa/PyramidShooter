@@ -105,8 +105,10 @@ void APyramidSpawner::CheckAdyacentsForDestroy(ASpawnObject* FromActor)
 {
 	TArray<AActor*> OverlappingActors;
 	FromActor->GetOverlappingActors(OverlappingActors, FromActor->StaticClass());
-
 	FLinearColor ColorToCompare = FromActor->Color;
+	
+	FillMatchingOverlappingCollection(OverlappingActors, ColorToCompare);
+
 	for (AActor* actor : OverlappingActors)
 	{
 		ASpawnObject* AdyacentActor = Cast<ASpawnObject>(actor);
@@ -121,6 +123,28 @@ void APyramidSpawner::CheckAdyacentsForDestroy(ASpawnObject* FromActor)
 	}
 }
 
+void APyramidSpawner::FillMatchingOverlappingCollection(TArray<AActor*> OverlappingActors, FLinearColor ColorToCompare)
+{
+	int OverlappingMatchCount = 0;
+	for (AActor* actor : OverlappingActors)
+	{
+		ASpawnObject* AdyacentActor = Cast<ASpawnObject>(actor);
+		if (AdyacentActor)
+		{
+			if (!AdyacentActor->bAlreadyMatchCounted && AdyacentActor->Color == ColorToCompare && !AdyacentActor->bShouldDestroy)
+			{
+				OverlappingMatchCount++;
+				AdyacentActor->bAlreadyMatchCounted = true;
+			}
+		}
+	}
+
+	if (OverlappingMatchCount > 0)
+	{
+		MatchingOverlappingCollection.Add(OverlappingMatchCount);
+	}
+}
+
 void APyramidSpawner::MarkActorForDestroy(ASpawnObject* Actor)
 {
 	Actor->bShouldDestroy = true;
@@ -130,13 +154,14 @@ void APyramidSpawner::MarkActorForDestroy(ASpawnObject* Actor)
 
 void APyramidSpawner::DestroyAllMarkedActors(AController* HitterOwner)
 {
+	AddScore(HitterOwner);
+
 	for (AActor* actor : ActorsMarkedForDestroy)
 	{
-		AddScore(HitterOwner);
 		actor->Destroy();
 		SpawnedObjectCounter--;
 	}
-
+	
 	ActorsMarkedForDestroy.Empty();
 }
 
@@ -160,8 +185,19 @@ void APyramidSpawner::AddScore(AController* HitterOwner)
 {	
 	if (HitterOwner)
 	{
+		int fibonacciScoreResult = FibonacciSeries[1];
+
+		for (int i = 0; i < MatchingOverlappingCollection.Num(); i++)
+		{
+			fibonacciScoreResult += MatchingOverlappingCollection[i] * FibonacciSeries[i + 2];
+		}
+
 		APlayerState* PlayerState = HitterOwner->GetPlayerState<APlayerState>();
-		PlayerState->Score++;
+		int ResultingScore = fibonacciScoreResult + PlayerState->Score++;
+
+		PlayerState->SetScore(ResultingScore);
+
+		MatchingOverlappingCollection.Empty();
 	}
 }
 
