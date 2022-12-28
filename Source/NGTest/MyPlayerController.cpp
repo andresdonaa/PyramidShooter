@@ -1,6 +1,7 @@
 #include "MyPlayerController.h"
 #include "Blueprint/UserWidget.h"
 #include "GameFramework/PlayerState.h"
+#include "GameFramework/GameStateBase.h"
 
 void AMyPlayerController::BeginPlay()
 {
@@ -28,6 +29,18 @@ void AMyPlayerController::GameHasEnded(class AActor* EndGameFocus, bool bIsWinne
 
 void AMyPlayerController::ClientShowLeaderboard_Implementation()
 {
-    ShowLeaderboard(); // BP Function
+    TArray<APlayerState*> SortedPlayerStateCollection = SortPlayersStateByScoreDesc();
+
+    ShowLeaderboard(SortedPlayerStateCollection); // BP Function
     SetInputMode(FInputModeUIOnly::FInputModeUIOnly());
+}
+
+TArray<APlayerState*> AMyPlayerController::SortPlayersStateByScoreDesc()
+{
+    UWorld* World = GetWorld();
+    TArray<APlayerState*> PlayerStateCollection = World->GetGameState()->PlayerArray;
+
+    PlayerStateCollection.Sort([](const APlayerState& A, const APlayerState& B) { return (A.GetScore() > B.GetScore()); });
+
+    return PlayerStateCollection;
 }

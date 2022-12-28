@@ -23,3 +23,4 @@ void ANGTestGameMode::BeginPlay()
 }
 
 //	GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Green, TEXT("Remote"));
+//	GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, FString::Printf(TEXT("%s = StringVariable / %f = FloatVariable"), MyString, MyFloat));

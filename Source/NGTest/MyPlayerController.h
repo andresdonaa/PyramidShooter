@@ -23,12 +23,14 @@ private:
 	UFUNCTION(Reliable, Client)
 	void ClientShowLeaderboard();
 
+	TArray<APlayerState*> SortPlayersStateByScoreDesc();
+
 public:
 
 	virtual void GameHasEnded(class AActor* EndGameFocus = NULL, bool bIsWinner = false) override;
 
 	UFUNCTION(BlueprintImplementableEvent)
-	void ShowLeaderboard();
+	void ShowLeaderboard(const TArray<class APlayerState*> &PlayerStateCollection);
 
 	UPROPERTY(BlueprintReadOnly)
 	UUserWidget* HUD;
