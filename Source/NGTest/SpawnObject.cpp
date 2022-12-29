@@ -3,6 +3,7 @@
 #include "Components/BoxComponent.h"
 #include "NGTestProjectile.h"
 #include "ShapeSpawner.h"
+#include "Kismet/GameplayStatics.h"
 #include "Net/UnrealNetwork.h"
 
 void ASpawnObject::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
@@ -76,5 +77,18 @@ void ASpawnObject::OnHitted(UPrimitiveComponent* HitComp, AActor* OtherActor, UP
 
 			Projectile->Destroy();
 		}
+	}
+}
+
+void ASpawnObject::Destroyed()
+{
+	if (DestructionParticleEffect)
+	{
+		UGameplayStatics::SpawnEmitterAtLocation(this, DestructionParticleEffect, GetActorLocation(), GetActorRotation());
+	}
+
+	if (DestructionSFX)
+	{
+		UGameplayStatics::PlaySoundAtLocation(this, DestructionSFX, GetActorLocation());
 	}
 }

@@ -12,13 +12,12 @@ class NGTEST_API ASpawnObject : public AActor
 	
 public:
 
-	UPROPERTY(VisibleAnywhere)
-	class UBoxComponent* CollisionComp;
-
-	UPROPERTY(VisibleAnywhere)
-	UStaticMeshComponent* ObjectToSpawn;
-
 	virtual void Tick(float DeltaTime) override;
+
+	UFUNCTION()
+	void OnHitted(UPrimitiveComponent* HitComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, FVector NormalImpulse, const FHitResult& Hit);
+
+	virtual void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
 
 private:
 
@@ -26,6 +25,18 @@ private:
 	class UMaterialInstanceDynamic* Material;
 
 public:	
+
+	UPROPERTY(VisibleAnywhere)
+	class UBoxComponent* CollisionComp;
+
+	UPROPERTY(VisibleAnywhere)
+	UStaticMeshComponent* ObjectToSpawn;
+
+	UPROPERTY(EditAnywhere)
+	class UParticleSystem* DestructionParticleEffect;
+
+	UPROPERTY(EditAnywhere)
+	class USoundBase* DestructionSFX;
 
 	UPROPERTY(Replicated, EditAnywhere)
 	FLinearColor Color;
@@ -39,10 +50,6 @@ public:
 	ASpawnObject();
 	void ApplyColor(FLinearColor ColorToApply);
 
-	UFUNCTION()
-	void OnHitted(UPrimitiveComponent* HitComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, FVector NormalImpulse, const FHitResult& Hit);
-
-	virtual void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
 
 private:
 	
@@ -52,5 +59,6 @@ private:
 protected:
 	
 	virtual void BeginPlay() override;
+	virtual void Destroyed() override;
 
 };

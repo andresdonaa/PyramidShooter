@@ -158,7 +158,7 @@ void APyramidSpawner::DestroyAllMarkedActors(AController* HitterOwner)
 
 	for (AActor* actor : ActorsMarkedForDestroy)
 	{
-		actor->Destroy();
+		actor->Destroy();		
 		SpawnedObjectCounter--;
 	}
 	

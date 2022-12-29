@@ -21,15 +21,16 @@ private:
 
 	UPROPERTY()
 	TArray<int> MatchingOverlappingCollection;
-
+	
 	//TODO: Move to specific responsible class
 	const TArray<int> FibonacciSeries = { 0,1,1,2,3,5,8,13,21,34,55,89,144,233,377,610,987,1597,2584,4181 };
-	
+
+
 protected:
 	
 	virtual void BeginPlay() override;
 	virtual void Spawn() override;
-	
+
 private:
 
 	FVector GetNewRowOffset(float ActorWidth, float ActorHeight);
