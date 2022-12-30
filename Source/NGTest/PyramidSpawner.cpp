@@ -39,22 +39,22 @@ void APyramidSpawner::Spawn()
 
 void APyramidSpawner::SpawnActors(UWorld* World, FVector& LastSpawnPosition, FVector& SpawnOffset, FVector& InitialRowSpawnPosition, float ActorWidth, float ActorHeight)
 {
-	for (int row = 0; row < PyramidBaseColumns; row++)
+	for (int Row = 0; Row < PyramidBaseColumns; Row++)
 	{
-		bool isFirstColumnInRow = true;
+		bool bIsFirstColumnInRow = true;
 
-		for (int col = 0; col < PyramidBaseColumns - row; col++)
+		for (int Col = 0; Col < PyramidBaseColumns - Row; Col++)
 		{
 			ASpawnObject* SpawnedActor = nullptr;
 
-			if (!isFirstColumnInRow)
+			if (!bIsFirstColumnInRow)
 			{
 				SpawnedActor = World->SpawnActor<ASpawnObject>(SpawnObjectClass, LastSpawnPosition + SpawnOffset, GetActorRotation());
 			}
 			else
 			{
 				SpawnedActor = World->SpawnActor<ASpawnObject>(SpawnObjectClass, LastSpawnPosition, GetActorRotation());
-				isFirstColumnInRow = false;
+				bIsFirstColumnInRow = false;
 			}
 
 			SpawnedObjectCounter++;
@@ -109,9 +109,9 @@ void APyramidSpawner::CheckAdyacentsForDestroy(ASpawnObject* FromActor)
 	
 	FillMatchingOverlappingCollection(OverlappingActors, ColorToCompare);
 
-	for (AActor* actor : OverlappingActors)
+	for (AActor* Actor : OverlappingActors)
 	{
-		ASpawnObject* AdyacentActor = Cast<ASpawnObject>(actor);
+		ASpawnObject* AdyacentActor = Cast<ASpawnObject>(Actor);
 		if (AdyacentActor)
 		{
 			if (AdyacentActor->Color == ColorToCompare && !AdyacentActor->bShouldDestroy)
@@ -126,9 +126,9 @@ void APyramidSpawner::CheckAdyacentsForDestroy(ASpawnObject* FromActor)
 void APyramidSpawner::FillMatchingOverlappingCollection(TArray<AActor*> OverlappingActors, FLinearColor ColorToCompare)
 {
 	int OverlappingMatchCount = 0;
-	for (AActor* actor : OverlappingActors)
+	for (AActor* Actor : OverlappingActors)
 	{
-		ASpawnObject* AdyacentActor = Cast<ASpawnObject>(actor);
+		ASpawnObject* AdyacentActor = Cast<ASpawnObject>(Actor);
 		if (AdyacentActor)
 		{
 			if (!AdyacentActor->bAlreadyMatchCounted && AdyacentActor->Color == ColorToCompare && !AdyacentActor->bShouldDestroy)
@@ -156,9 +156,9 @@ void APyramidSpawner::DestroyAllMarkedActors(AController* HitterOwner)
 {
 	AddScore(HitterOwner);
 
-	for (AActor* actor : ActorsMarkedForDestroy)
+	for (AActor* Actor : ActorsMarkedForDestroy)
 	{
-		actor->Destroy();		
+		Actor->Destroy();
 		SpawnedObjectCounter--;
 	}
 	
@@ -185,15 +185,15 @@ void APyramidSpawner::AddScore(AController* HitterOwner)
 {	
 	if (HitterOwner)
 	{
-		int fibonacciScoreResult = FibonacciSeries[1];
+		int FibonacciScoreResult = FibonacciSeries[1];
 
 		for (int i = 0; i < MatchingOverlappingCollection.Num(); i++)
 		{
-			fibonacciScoreResult += MatchingOverlappingCollection[i] * FibonacciSeries[i + 2];
+			FibonacciScoreResult += MatchingOverlappingCollection[i] * FibonacciSeries[i + 2];
 		}
 
 		APlayerState* PlayerState = HitterOwner->GetPlayerState<APlayerState>();
-		int ResultingScore = fibonacciScoreResult + PlayerState->Score++;
+		int ResultingScore = FibonacciScoreResult + PlayerState->Score++;
 
 		PlayerState->SetScore(ResultingScore);
 
