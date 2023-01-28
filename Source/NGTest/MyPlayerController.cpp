@@ -13,6 +13,11 @@ void AMyPlayerController::BeginPlay()
     }
 }
 
+void AMyPlayerController::GameHasEnded(class AActor* EndGameFocus, bool bIsWinner)
+{
+    ClientShowLeaderboard();
+}
+
 void AMyPlayerController::CreateHUD()
 {
     HUD = CreateWidget(this, HUDClass);
@@ -20,11 +25,6 @@ void AMyPlayerController::CreateHUD()
     {
         HUD->AddToViewport();        
     }
-}
-
-void AMyPlayerController::GameHasEnded(class AActor* EndGameFocus, bool bIsWinner)
-{
-    ClientShowLeaderboard();
 }
 
 void AMyPlayerController::ClientShowLeaderboard_Implementation()

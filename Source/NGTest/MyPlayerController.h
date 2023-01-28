@@ -10,29 +10,28 @@ class NGTEST_API AMyPlayerController : public APlayerController
 {
 	GENERATED_BODY()
 
-protected:
-	virtual void BeginPlay() override;
-
-private:
-
+private: //Fields
 	UPROPERTY(EditAnywhere)
 	TSubclassOf<class UUserWidget> HUDClass;
-	
-	void CreateHUD();
 
-	UFUNCTION(Reliable, Client)
-	void ClientShowLeaderboard();
-
-	TArray<APlayerState*> SortPlayersStateByScoreDesc();
-
-public:
-
-	virtual void GameHasEnded(class AActor* EndGameFocus = NULL, bool bIsWinner = false) override;
-
-	UFUNCTION(BlueprintImplementableEvent)
-	void ShowLeaderboard(const TArray<class APlayerState*> &PlayerStateCollection);
-
+public: //Fields
 	UPROPERTY(BlueprintReadOnly)
 	UUserWidget* HUD;
 
+protected:
+	virtual void BeginPlay() override;
+
+public: //Functions
+	virtual void GameHasEnded(class AActor* EndGameFocus = NULL, bool bIsWinner = false) override;
+
+	UFUNCTION(BlueprintImplementableEvent)
+	void ShowLeaderboard(const TArray<class APlayerState*>& PlayerStateCollection);
+
+private: //Functions
+	UFUNCTION(Reliable, Client)
+	void ClientShowLeaderboard();
+
+	void CreateHUD();
+
+	TArray<APlayerState*> SortPlayersStateByScoreDesc();
 };

@@ -9,12 +9,10 @@ class NGTEST_API AShapeSpawner : public AActor
 {
 	GENERATED_BODY()
 	
-public:	
-	
+public:	//Constructor	
 	AShapeSpawner();
 
-protected:
-
+protected: //Fields
 	UPROPERTY(EditDefaultsOnly)
 	TSubclassOf<class ASpawnObject> SpawnObjectClass;
 
@@ -24,11 +22,11 @@ protected:
 	UPROPERTY()
 	int SpawnedObjectCounter = 0;
 
+protected: //Functions
 	virtual void BeginPlay() override;
 	virtual void Spawn();
 
-public:	
-
+public:	//Functions
 	virtual void Tick(float DeltaTime) override;
 	virtual void OnSpawnedObjectHitted(ASpawnObject* HittedObject, AController* HitterOwner);
 };

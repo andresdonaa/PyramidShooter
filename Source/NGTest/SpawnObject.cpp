@@ -36,23 +36,6 @@ void ASpawnObject::Tick(float DeltaTime)
 	Super::Tick(DeltaTime);
 }
 
-void ASpawnObject::CreateComponents()
-{	
-	ObjectToSpawn = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Actor"));
-	
-	RootComponent = ObjectToSpawn;
-
-	CollisionComp = CreateDefaultSubobject<UBoxComponent>(TEXT("BoxComp"));
-	CollisionComp->SetupAttachment(ObjectToSpawn);
-}
-
-void ASpawnObject::ApplyDefaultColor()
-{
-	Material = UMaterialInstanceDynamic::Create(ObjectToSpawn->GetMaterial(0), NULL);
-	ObjectToSpawn->SetMaterial(0, Material);
-	Material->SetVectorParameterValue(FName(TEXT("BaseColor")), Color);
-}
-
 void ASpawnObject::ApplyColor(FLinearColor ColorToApply)
 {
 	Color = ColorToApply;
@@ -91,4 +74,21 @@ void ASpawnObject::Destroyed()
 	{
 		UGameplayStatics::PlaySoundAtLocation(this, DestructionSFX, GetActorLocation());
 	}
+}
+
+void ASpawnObject::CreateComponents()
+{
+	ObjectToSpawn = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Actor"));
+
+	RootComponent = ObjectToSpawn;
+
+	CollisionComp = CreateDefaultSubobject<UBoxComponent>(TEXT("BoxComp"));
+	CollisionComp->SetupAttachment(ObjectToSpawn);
+}
+
+void ASpawnObject::ApplyDefaultColor()
+{
+	Material = UMaterialInstanceDynamic::Create(ObjectToSpawn->GetMaterial(0), NULL);
+	ObjectToSpawn->SetMaterial(0, Material);
+	Material->SetVectorParameterValue(FName(TEXT("BaseColor")), Color);
 }

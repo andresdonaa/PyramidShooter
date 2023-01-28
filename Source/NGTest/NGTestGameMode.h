@@ -11,16 +11,14 @@ class ANGTestGameMode : public AGameModeBase
 {
 	GENERATED_BODY()
 
-public:
+public: //Constructor
 	ANGTestGameMode();
 
-private:
-
+private: //Fields
 	UPROPERTY(EditAnywhere)
 	TSubclassOf<class AShapeSpawner> SpawnerClass;
 
 protected:
-
 	virtual void BeginPlay() override;
 };
 

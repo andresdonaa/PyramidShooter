@@ -37,6 +37,19 @@ void APyramidSpawner::Spawn()
 	SpawnActors(World, LastSpawnPosition, SpawnOffset, InitialRowSpawnPosition, ActorWidth, ActorHeight);
 }
 
+void APyramidSpawner::OnSpawnedObjectHitted(ASpawnObject* HittedObject, AController* HitterOwner)
+{
+	Super::OnSpawnedObjectHitted(HittedObject, HitterOwner);
+
+	MarkActorForDestroy(HittedObject);
+
+	CheckAdyacentsForDestroy(HittedObject);
+
+	DestroyAllMarkedActors(HitterOwner);
+
+	CheckForGameOver();
+}
+
 void APyramidSpawner::SpawnActors(UWorld* World, FVector& LastSpawnPosition, FVector& SpawnOffset, FVector& InitialRowSpawnPosition, float ActorWidth, float ActorHeight)
 {
 	for (int Row = 0; Row < PyramidBaseColumns; Row++)
@@ -86,19 +99,6 @@ FLinearColor APyramidSpawner::GetRandomColor()
 	int ColorsLength = SpawnColors.Num();
 	int RandomIndex = FMath::RandRange(0, ColorsLength - 1);
 	return SpawnColors[RandomIndex];
-}
-
-void APyramidSpawner::OnSpawnedObjectHitted(ASpawnObject* HittedObject, AController* HitterOwner)
-{
-	Super::OnSpawnedObjectHitted(HittedObject, HitterOwner);
-
-	MarkActorForDestroy(HittedObject);
-
-	CheckAdyacentsForDestroy(HittedObject);
-
-	DestroyAllMarkedActors(HitterOwner);
-
-	CheckForGameOver();	
 }
 
 void APyramidSpawner::CheckAdyacentsForDestroy(ASpawnObject* FromActor)
