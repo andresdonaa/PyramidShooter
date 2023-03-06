@@ -31,7 +31,10 @@ private: //Functions
 	UFUNCTION(Reliable, Client)
 	void ClientShowLeaderboard();
 
+	UFUNCTION(Reliable, Client)
+	void DisablePlayerMovement();
+
 	void CreateHUD();
 
-	TArray<APlayerState*> SortPlayersStateByScoreDesc();
+	TArray<APlayerState*> GetSortedPlayersStateByScoreDesc();
 };

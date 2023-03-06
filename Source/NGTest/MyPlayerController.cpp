@@ -16,6 +16,7 @@ void AMyPlayerController::BeginPlay()
 void AMyPlayerController::GameHasEnded(class AActor* EndGameFocus, bool bIsWinner)
 {
     ClientShowLeaderboard();
+    DisablePlayerMovement();
 }
 
 void AMyPlayerController::CreateHUD()
@@ -29,13 +30,17 @@ void AMyPlayerController::CreateHUD()
 
 void AMyPlayerController::ClientShowLeaderboard_Implementation()
 {
-    TArray<APlayerState*> SortedPlayerStateCollection = SortPlayersStateByScoreDesc();
-
+    TArray<APlayerState*> SortedPlayerStateCollection = GetSortedPlayersStateByScoreDesc();
     ShowLeaderboard(SortedPlayerStateCollection); // BP Function
-    SetInputMode(FInputModeUIOnly::FInputModeUIOnly());
 }
 
-TArray<APlayerState*> AMyPlayerController::SortPlayersStateByScoreDesc()
+void AMyPlayerController::DisablePlayerMovement_Implementation()
+{
+    SetInputMode(FInputModeUIOnly::FInputModeUIOnly());
+    SetIgnoreMoveInput(true);
+}
+
+TArray<APlayerState*> AMyPlayerController::GetSortedPlayersStateByScoreDesc()
 {
     UWorld* World = GetWorld();
     TArray<APlayerState*> PlayerStateCollection = World->GetGameState()->PlayerArray;
